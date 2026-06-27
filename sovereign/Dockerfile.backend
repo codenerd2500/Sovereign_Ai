@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend code and common libraries
+COPY backend/ ./backend/
+COPY regional_data_agents/ ./regional_data_agents/
+COPY orchestrator/ ./orchestrator/
+
+EXPOSE 8000
+
+# Start FastAPI server
+CMD uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}
